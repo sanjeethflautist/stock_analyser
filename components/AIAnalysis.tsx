@@ -84,7 +84,7 @@ export default function AIAnalysis({ stockSymbol, stockData }: AIAnalysisProps) 
 
       {/* Recommendation Badge */}
       <div className="flex flex-wrap gap-4 mb-6">
-        <div className={`px-6 py-3 rounded-lg border-2 ${recommendationColors[analysis.recommendation]}`}>
+        <div className={`px-6 py-3 rounded-lg border-2 ${recommendationColors[analysis.recommendation as keyof typeof recommendationColors]}`}>
           <div className="flex items-center gap-2">
             {analysis.recommendation === 'BUY' && <TrendingUp className="w-5 h-5" />}
             {analysis.recommendation === 'SELL' && <TrendingDown className="w-5 h-5" />}
