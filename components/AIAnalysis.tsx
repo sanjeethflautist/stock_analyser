@@ -103,7 +103,7 @@ export default function AIAnalysis({ stockSymbol, stockData }: AIAnalysisProps) 
 
         <div className="px-6 py-3 rounded-lg bg-gray-100 dark:bg-gray-700 border-2 border-gray-300 dark:border-gray-600">
           <p className="text-sm font-medium text-gray-600 dark:text-gray-400">Risk Level</p>
-          <p className={`text-xl font-bold ${riskColors[analysis.riskLevel]}`}>
+          <p className={`text-xl font-bold ${riskColors[analysis.riskLevel as keyof typeof riskColors]}`}>
             {analysis.riskLevel}
           </p>
         </div>
