@@ -83,11 +83,12 @@ Do NOT include any personal data or make guarantees about future performance. Th
           confidence: parsed.confidence || 50,
           riskLevel: parsed.riskLevel || 'MEDIUM',
           keyPoints: parsed.keyPoints || [],
+          priceTargets: parsed.priceTargets || calculatePriceTargets(currentPrice, priceChange30d),
         };
       }
     } catch (parseError) {
       // If JSON parsing fails, create structured response from text
-      return parseTextResponse(aiResponse, priceChange30d, volatility);
+      return parseTextResponse(aiResponse, priceChange30d, volatility, currentPrice);
     }
 
     return parseTextResponse(aiResponse, priceChange30d, volatility);
@@ -100,9 +101,25 @@ Do NOT include any personal data or make guarantees about future performance. Th
 }
 
 /**
+ * Calculate price targets based on current price and trends
+ */
+function calculatePriceTargets(currentPrice: number, priceChange: number): { buyPrice: number; sellPrice: number; stopLoss: number } {
+  // Conservative approach: buy slightly below current, sell with 10-15% upside, stop-loss 5-7% below
+  const buyPrice = currentPrice * (priceChange > 0 ? 0.97 : 0.95); // Buy on dip
+  const sellPrice = currentPrice * (priceChange > 0 ? 1.15 : 1.10); // Target gain
+  const stopLoss = currentPrice * 0.93; // Risk management
+  
+  return {
+    buyPrice: parseFloat(buyPrice.toFixed(2)),
+    sellPrice: parseFloat(sellPrice.toFixed(2)),
+    stopLoss: parseFloat(stopLoss.toFixed(2)),
+  };
+}
+
+/**
  * Parse text response into structured format
  */
-function parseTextResponse(text: string, priceChange: number, volatility: number): AIAnalysisResult {
+function parseTextResponse(text: string, priceChange: number, volatility: number, currentPrice: number): AIAnalysisResult {
   const recommendation = text.match(/\b(BUY|SELL|HOLD)\b/i)?.[0].toUpperCase() as any || 'HOLD';
   const confidenceMatch = text.match(/confidence[:\s]+(\d+)/i);
   const confidence = confidenceMatch ? parseInt(confidenceMatch[1]) : 50;
@@ -127,6 +144,7 @@ function parseTextResponse(text: string, priceChange: number, volatility: number
       `Volatility level: ${volatility.toFixed(2)}%`,
       `AI recommendation: ${recommendation}`
     ],
+    priceTargets: calculatePriceTargets(currentPrice, priceChange),
   };
 }
 
@@ -178,6 +196,7 @@ This analysis is based on technical indicators and historical price movements. A
       `Volatility: ${volatility.toFixed(2)}% (${riskLevel} risk)`,
       `Recommendation: ${recommendation} (${confidence}% confidence)`
     ],
+    priceTargets: calculatePriceTargets(currentPrice, priceChange30d),
   };
 }
 
