@@ -9,6 +9,11 @@ export interface AIAnalysisResult {
   confidence: number;
   riskLevel: 'LOW' | 'MEDIUM' | 'HIGH';
   keyPoints: string[];
+  priceTargets?: {
+    buyPrice?: number;
+    sellPrice?: number;
+    stopLoss?: number;
+  };
 }
 
 /**
@@ -44,8 +49,9 @@ Based on this data, provide:
 3. Risk assessment (LOW/MEDIUM/HIGH)
 4. 3-5 key points for investors
 5. Brief analysis (2-3 paragraphs)
+6. Price targets: buyPrice (suggested entry point), sellPrice (target exit), stopLoss (risk management)
 
-Format your response as JSON with keys: recommendation, confidence, riskLevel, keyPoints (array), analysis (string).
+Format your response as JSON with keys: recommendation, confidence, riskLevel, keyPoints (array), analysis (string), priceTargets (object with buyPrice, sellPrice, stopLoss as numbers).
 Do NOT include any personal data or make guarantees about future performance. This is for educational purposes only.`;
 
     const response = await axios.post(
