@@ -109,6 +109,30 @@ export default function AIAnalysis({ stockSymbol, stockData }: AIAnalysisProps) 
         </div>
       </div>
 
+      {/* Price Targets */}
+      {analysis.priceTargets && (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+          {analysis.priceTargets.buyPrice && (
+            <div className="px-4 py-3 rounded-lg bg-green-50 dark:bg-green-900/20 border-2 border-green-300 dark:border-green-700">
+              <p className="text-sm font-medium text-green-800 dark:text-green-400">Buy Price</p>
+              <p className="text-xl font-bold text-green-900 dark:text-green-300">${analysis.priceTargets.buyPrice.toFixed(2)}</p>
+            </div>
+          )}
+          {analysis.priceTargets.sellPrice && (
+            <div className="px-4 py-3 rounded-lg bg-blue-50 dark:bg-blue-900/20 border-2 border-blue-300 dark:border-blue-700">
+              <p className="text-sm font-medium text-blue-800 dark:text-blue-400">Sell Target</p>
+              <p className="text-xl font-bold text-blue-900 dark:text-blue-300">${analysis.priceTargets.sellPrice.toFixed(2)}</p>
+            </div>
+          )}
+          {analysis.priceTargets.stopLoss && (
+            <div className="px-4 py-3 rounded-lg bg-red-50 dark:bg-red-900/20 border-2 border-red-300 dark:border-red-700">
+              <p className="text-sm font-medium text-red-800 dark:text-red-400">Stop Loss</p>
+              <p className="text-xl font-bold text-red-900 dark:text-red-300">${analysis.priceTargets.stopLoss.toFixed(2)}</p>
+            </div>
+          )}
+        </div>
+      )}
+
       {/* Key Points */}
       {analysis.keyPoints && analysis.keyPoints.length > 0 && (
         <div className="mb-6">
